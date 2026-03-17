@@ -8,6 +8,11 @@ export default {
   },
   created() {
     this.languages = this.$i18n.availableLocales;
+  },
+  methods: {
+    setLanguage(lang) {
+      this.$i18n.locale = lang;
+    }
   }
 }
 </script>
@@ -18,7 +23,7 @@ export default {
       <button
           v-for="lang in languages"
           :key="lang"
-          @click="$i18n.locale = lang"
+          @click="setLanguage(lang)"
           :class="['lang-btn', { 'active': $i18n.locale === lang }]"
       >
         <span class="lang-text">{{ lang.toUpperCase() }}</span>
