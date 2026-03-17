@@ -65,10 +65,13 @@ export default {
         });
 
       } catch (error) {
+        console.error("Sign-up process failed:", error);
+        const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
+
         this.$toast.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Registration failed. Please try again.',
+          detail: errorMessage,
           life: 4000
         });
       } finally {
