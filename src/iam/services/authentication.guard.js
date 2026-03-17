@@ -12,13 +12,18 @@ import {useAuthenticationStore} from "./authentication.store.js";
 export const authenticationGuard = (to) => {
     const authenticationStore = useAuthenticationStore();
 
-    const isAnonymous = !authenticationStore.isSignedIn;
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const isAuthenticated = authenticationStore.isSignedIn || !!token;
+
     const publicRoutes = ['/sign-in', '/sign-up', '/about', '/page-not-found'];
+    const isPublicRoute = publicRoutes.includes(to.path);
 
-    const routeRequiresToBeAuthenticated = !publicRoutes.includes(to.path);
-
-    if (isAnonymous && routeRequiresToBeAuthenticated) {
+    if (!isAuthenticated && !isPublicRoute) {
         return { name: 'sign-in' };
+    }
+
+    if (isAuthenticated && isPublicRoute && to.path !== '/about') {
+        return { name: 'home' };
     }
 
     return true;

@@ -13,7 +13,12 @@ const authenticationService = new AuthenticationService();
  * It contains actions to sign-in, sign-up, and sign-out.
  */
 export const useAuthenticationStore = defineStore('authentication',{
-    state: () => ({ signedIn: false, userId: 0, username: '', email: '' }),
+    state: () => ({
+        signedIn: !!(localStorage.getItem('token') || sessionStorage.getItem('token')),
+        userId: 0,
+        username: '',
+        email: ''
+    }),
     getters: {
         /**
          * Getter to check if user is signed in
@@ -37,9 +42,17 @@ export const useAuthenticationStore = defineStore('authentication',{
          * Getter to get the current token
          * @returns {string} - Current token
          */
-        currentToken: () => localStorage.getItem('token')
+        currentToken: () => localStorage.getItem('token') || sessionStorage.getItem('token'),
+
+        checkIsSignedIn: (state) => !!(this.state.signedIn || localStorage.getItem('token') || sessionStorage.getItem('token'))
     },
     actions: {
+        initStore() {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            if (token) {
+                this.signedIn = true;
+            }
+        },
         /**
          * Action to sign-in
          * @summary
@@ -49,8 +62,9 @@ export const useAuthenticationStore = defineStore('authentication',{
          * If sign-in fails, it redirects to the sign-in page.
          * @param signInRequest - The {@link SignInRequest} object to sign-in
          * @param router - Vue router instance
+         * @param rememberMe - The value to represent whether to remember the user or not
          */
-        async signIn(signInRequest, router) {
+        async signIn(signInRequest, router, rememberMe) {
             try {
                 const response = await authenticationService.signIn(signInRequest);
                 let signInResponse = new SignInResponse(
@@ -64,7 +78,12 @@ export const useAuthenticationStore = defineStore('authentication',{
                 this.userId = signInResponse.id;
                 this.username = signInResponse.username;
                 this.email = signInResponse.email;
-                localStorage.setItem('token', signInResponse.token);
+
+                if (rememberMe) {
+                    localStorage.setItem('token', signInResponse.token);
+                } else {
+                    sessionStorage.setItem('token', signInResponse.token);
+                }
 
                 router.push({ name: 'home' });
                 return response;
@@ -117,7 +136,10 @@ export const useAuthenticationStore = defineStore('authentication',{
             this.signedIn = false;
             this.userId = 0;
             this.username = '';
+
             localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
+
             console.log('Signed out');
             router.push({ name: 'sign-in' });
         }

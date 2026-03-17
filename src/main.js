@@ -9,7 +9,7 @@ import router from "./router/index.js";
 import App from "./App.vue";
 import {
     Avatar,
-    Button, Card,
+    Button, Card, Checkbox,
     ConfirmationService, ConfirmDialog,
     DialogService, Drawer,
     FloatLabel,
@@ -39,5 +39,6 @@ app
     .component('pv-drawer', Drawer)
     .component('pv-card', Card)
     .component('pv-avatar', Avatar)
+    .component('pv-checkbox', Checkbox)
     .use(router)
     .mount('#app')

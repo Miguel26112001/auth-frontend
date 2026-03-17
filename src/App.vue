@@ -2,6 +2,7 @@
 import LanguageSwitcher from "./public/components/language-switcher.component.vue";
 import FooterContent from "./public/components/footer-content.component.vue";
 import AuthenticationSection from "./iam/components/authentication-section.component.vue";
+import {useAuthenticationStore} from "@/iam/services/authentication.store.js";
 
 export default {
   name: 'App',
@@ -12,6 +13,15 @@ export default {
       items: [
         {label: 'option.home',       to: '/home'}
       ]
+    }
+  },
+  created() {
+    const authStore = useAuthenticationStore();
+
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+    if (token) {
+      authStore.signedIn = true;
     }
   },
   computed: {
@@ -74,7 +84,7 @@ export default {
     </header>
 
     <main :class="['main-content', { 'auth-layout': isAuthPage }]">
-      <div class="absolute top-0 right-0 p-4">
+      <div v-if="isAuthPage" class="absolute top-0 right-0 p-4" style="z-index: 10">
         <language-switcher />
       </div>
       <router-view/>

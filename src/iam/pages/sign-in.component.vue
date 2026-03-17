@@ -13,6 +13,7 @@ export default {
     return {
       username: "",
       password: "",
+      rememberMe: false,
       submitted: false,
       loading: false
     };
@@ -35,7 +36,7 @@ export default {
           const authenticationStore = useAuthenticationStore();
           const signInRequest = new SignInRequest(this.username, this.password);
 
-          await authenticationStore.signIn(signInRequest, this.$router);
+          await authenticationStore.signIn(signInRequest, this.$router, this.rememberMe);
 
           this.$toast.add({
             severity: 'success',
@@ -113,6 +114,11 @@ export default {
               <label for="password">Password</label>
             </pv-float-label>
             <small v-if="submitted && !password" class="p-error">Password is required.</small>
+          </div>
+
+          <div class="field-checkbox mb-4 flex align-items-center gap-2">
+            <pv-checkbox id="rememberMe" v-model="rememberMe" :binary="true" />
+            <label for="rememberMe" class="text-sm text-white-alpha-70:">Remember me</label>
           </div>
 
           <div class="mt-2">
