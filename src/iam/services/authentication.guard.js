@@ -4,17 +4,22 @@ import {useAuthenticationStore} from "./authentication.store.js";
  * Guard to check if the user is authenticated
  * @summary
  * This guard checks if the user is authenticated.
- * If user is not authenticated and tries to navigate to a route that requires authentication,
+ * If a user is not authenticated and tries to navigate to a route that requires authentication,
  * it redirects to the sign-in page, otherwise it allows navigation.
  * @param to - Route to navigate to
- * @param from - Route from which navigation is done
- * @param next - Function to call to navigate to the next route
+ * @returns {boolean|object} - Returns true to allow, or a route object to redirect
  */
-export const authenticationGuard = (to, from, next) => {
+export const authenticationGuard = (to) => {
     const authenticationStore = useAuthenticationStore();
+
     const isAnonymous = !authenticationStore.isSignedIn;
     const publicRoutes = ['/sign-in', '/sign-up', '/about', '/page-not-found'];
+
     const routeRequiresToBeAuthenticated = !publicRoutes.includes(to.path);
-    if (isAnonymous && routeRequiresToBeAuthenticated) return next({ name: 'sign-in'});
-    else next();
+
+    if (isAnonymous && routeRequiresToBeAuthenticated) {
+        return { name: 'sign-in' };
+    }
+
+    return true;
 }

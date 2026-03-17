@@ -54,13 +54,13 @@ const router = createRouter({
  * @param {import('vue-router').NavigationGuardNext} next - Function to resolve the navigation
  */
 
-router.beforeEach((to, from, next) => {
-    console.log(`Navigating from ${from.name} to ${to.name}`);
-    // Set the page title
-    let baseTitle = 'ACME Learning Center';
-    document.title = `${baseTitle} | ${to.meta['title']}`;
-    // Call the authentication guard
-    authenticationGuard(to, from, next);
+router.beforeEach(async (to, from) => {
+    console.log(`Navigating from ${from.name?.toString() || 'start'} to ${to.name?.toString()}`);
+
+    const baseTitle = 'Auth - Miguel';
+    document.title = `${baseTitle} | ${to.meta['title'] || 'Welcome'}`;
+
+    return authenticationGuard(to);
 });
 
 export default router;
