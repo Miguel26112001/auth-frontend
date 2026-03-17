@@ -8,6 +8,7 @@ import pinia from "./pinia.js";
 import router from "./router/index.js";
 import App from "./App.vue";
 import {
+    Avatar,
     Button, Card,
     ConfirmationService, ConfirmDialog,
     DialogService, Drawer,
@@ -37,5 +38,6 @@ app
     .component('pv-toolbar', Toolbar)
     .component('pv-drawer', Drawer)
     .component('pv-card', Card)
+    .component('pv-avatar', Avatar)
     .use(router)
     .mount('#app')
