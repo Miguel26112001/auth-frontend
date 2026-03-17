@@ -66,7 +66,7 @@ export default {
     <div v-if="isSignedIn" class="flex align-items-center gap-3">
       <div class="user-info flex align-items-center gap-2 px-3 py-1">
         <pv-avatar
-            :label="currentUsername.charAt(0).toUpperCase()"
+            :label="currentUsername ? currentUsername.charAt(0).toUpperCase() : '?'"
             shape="circle"
             class="user-avatar bg-primary color-primary-700"
         />

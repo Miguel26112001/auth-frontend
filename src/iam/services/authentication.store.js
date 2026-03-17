@@ -2,6 +2,7 @@ import {AuthenticationService} from "./authentication.service.js";
 import {defineStore} from "pinia";
 import {SignInResponse} from "../model/sign-in.response.js";
 import {SignUpResponse} from "../model/sign-up.response.js";
+import {jwtDecode} from "jwt-decode";
 
 const authenticationService = new AuthenticationService();
 
@@ -51,6 +52,25 @@ export const useAuthenticationStore = defineStore('authentication',{
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             if (token) {
                 this.signedIn = true;
+            }
+        },
+
+        restoreSession() {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+            if (token) {
+                try {
+                    const decoded = jwtDecode(token);
+
+                    this.username = decoded.sub || decoded.username || 'User';
+                    this.userId = decoded.id || 0;
+                    this.signedIn = true;
+
+                    console.log("Sesión restaurada para:", this.username);
+                } catch (error) {
+                    console.error("Error al decodificar el token:", error);
+                    this.signOut().then(r => console.log("Sesión cerrada debido a token inválido"));
+                }
             }
         },
         /**

@@ -17,12 +17,7 @@ export default {
   },
   created() {
     const authStore = useAuthenticationStore();
-
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-
-    if (token) {
-      authStore.signedIn = true;
-    }
+    authStore.restoreSession();
   },
   computed: {
     isAuthPage() {
