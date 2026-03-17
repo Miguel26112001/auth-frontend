@@ -193,6 +193,9 @@ export default {
   width: 100%;
   max-width: 480px;
   border-radius: 12px;
+  background: rgba(26, 26, 26, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .w-full {

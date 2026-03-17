@@ -14,6 +14,12 @@ export default {
       ]
     }
   },
+  computed: {
+    isAuthPage() {
+      const authRoutes = ['sign-in', 'sign-up'];
+      return authRoutes.includes(this.$route.name);
+    }
+  },
   methods: {
     toggleDrawer() {
       this.drawer = !this.drawer
@@ -28,7 +34,21 @@ export default {
     <pv-toast/>
     <pv-confirm-dialog/>
 
-    <header>
+    <div v-if="isAuthPage" class="video-background-container">
+      <video
+          autoplay
+          muted
+          loop
+          playsinline
+          class="video-bg"
+      >
+        <source src="@/assets/videos/login-bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+
+    <header v-if="!isAuthPage">
       <pv-toolbar class="bg-primary border-none border-noround">
         <template #start>
           <pv-button class="p-button-text p-button-plain" icon="pi pi-bars" @click="toggleDrawer"/>
@@ -53,11 +73,14 @@ export default {
       <pv-drawer v-model:visible="drawer"/>
     </header>
 
-    <main class="main-content">
+    <main :class="['main-content', { 'auth-layout': isAuthPage }]">
+      <div class="absolute top-0 right-0 p-4">
+        <language-switcher />
+      </div>
       <router-view/>
     </main>
 
-    <footer class="footer-section bg-primary">
+    <footer v-if="!isAuthPage" class="footer-section bg-primary">
       <footer-content/>
     </footer>
   </div>
@@ -104,4 +127,43 @@ html, body {
 .border-none { border: none !important; }
 .border-noround { border-radius: 0 !important; }
 .m-0 { margin: 0 !important; }
+
+.main-content.auth-layout {
+  background: transparent;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(20, 160, 140, 0.4) 100%
+  );
+  backdrop-filter: blur(4px);
+}
 </style>

@@ -29,7 +29,7 @@ const routes = [
     {   path: '/home',                  name: 'home',       component: HomeComponent,               meta: {title: 'Home'}},
     {   path: '/sign-in',               name: 'sign-in',    component: SignInComponent,             meta: { title: 'Sign-In' } },
     {   path: '/sign-up',               name: 'sign-up',    component: SignUpComponent,             meta: { title: 'Sign-Up' } },
-    {   path: '/',                      name: 'default',    redirect: {name: 'home'}},
+    {   path: '/',                      name: 'default',    redirect: {name: 'sign-in'}},
     {   path: '/:pathMatch(.*)*',       name: 'not-found',  component: PageNotFoundComponent,       meta: {title: 'Page not found'}},
 ]
 
