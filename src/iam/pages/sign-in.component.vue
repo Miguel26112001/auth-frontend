@@ -34,7 +34,7 @@ export default {
     async onSignIn() {
       this.submitted = true;
 
-      if (this.username.trim() && this.password.trim()) {
+      if (!this.isFormInvalid) {
         this.loading = true;
 
         try {
@@ -53,8 +53,10 @@ export default {
         } catch (error) {
           let errorMessage = 'An unexpected error occurred.';
 
-          if (error.response?.status === 400) {
+          if (error.response?.status === 401) {
             errorMessage = 'Invalid username or password.';
+          } else if (error.response?.status === 404) {
+            errorMessage = 'Authentication service not found.';
           } else if (error.response?.status === 500) {
             errorMessage = 'Server is currently down. Please try again later.';
           }
@@ -189,5 +191,30 @@ export default {
 
 .text-center {
   text-align: center;
+}
+
+.login-card h2 {
+  font-family: 'Inter', sans-serif;
+  color: white;
+  font-weight: 700;
+}
+
+.field-checkbox label {
+  color: rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer;
+}
+
+.color-primary-700 {
+  color: var(--primary-color, #10b981) !important;
+}
+
+.p-button {
+  background: #10b981 !important;
+  border: none !important;
+}
+
+.p-button:disabled {
+  background: rgba(16, 185, 129, 0.4) !important;
+  opacity: 0.6;
 }
 </style>

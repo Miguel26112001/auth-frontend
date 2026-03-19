@@ -19,12 +19,49 @@ import {
     ToastService, Toolbar
 } from "primevue";
 
+import { definePreset } from '@primevue/themes';
+
+const MyLearningCenterPreset = definePreset(Material, {
+    semantic: {
+        primary: {
+            50: '{emerald.50}',
+            100: '{emerald.100}',
+            200: '{emerald.200}',
+            300: '{emerald.300}',
+            400: '{emerald.400}',
+            500: '#10b981',
+            600: '{emerald.600}',
+            700: '{emerald.700}',
+            800: '{emerald.800}',
+            900: '{emerald.900}',
+            950: '{emerald.950}'
+        },
+        colorScheme: {
+            dark: {
+                primary: {
+                    color: '{primary.500}',
+                    inverseColor: '#ffffff',
+                    hoverColor: '{primary.400}',
+                    activeColor: '{primary.300}'
+                }
+            }
+        }
+    }
+});
+
 const app = createApp(App);
 
 app
     .use(i18n)
     .use(pinia)
-    .use(PrimeVue, {theme: { preset: Material}, ripple: true})
+    .use(PrimeVue, {
+        theme: {
+            preset: MyLearningCenterPreset,
+            options: {
+                darkModeSelector: 'system',
+            }
+        }
+    })
     .use(ConfirmationService)
     .use(DialogService)
     .use(ToastService)

@@ -39,31 +39,38 @@ export default {
     <pv-toast/>
     <pv-confirm-dialog/>
 
+    <!-- Background Video solo para Login/Sign-up -->
     <div v-if="isAuthPage" class="video-background-container">
-      <video
-          autoplay
-          muted
-          loop
-          playsinline
-          class="video-bg"
-      >
+      <video autoplay muted loop playsinline class="video-bg">
         <source src="@/assets/videos/login-bg.mp4" type="video/mp4">
-        Your browser does not support the video tag.
       </video>
       <div class="video-overlay"></div>
     </div>
 
-    <header v-if="!isAuthPage">
-      <pv-toolbar class="bg-primary border-none border-noround">
+    <!-- Header con Glassmorphism -->
+    <header v-if="!isAuthPage" class="app-header">
+      <pv-toolbar class="glass-toolbar border-none">
         <template #start>
-          <pv-button class="p-button-text p-button-plain" icon="pi pi-bars" @click="toggleDrawer"/>
-          <h3 class="ml-2 m-0">ACME Learning Center</h3>
+          <pv-button
+              class="p-button-text p-button-rounded p-button-plain"
+              icon="pi pi-bars"
+              @click="toggleDrawer"
+          />
+          <h3 class="app-logo ml-3 m-0">ACME <span>Learning Center</span></h3>
         </template>
 
         <template #center>
-          <div class="flex gap-2">
-            <pv-button v-for="item in items" :key="item.label" as-child v-slot="slotProps" class="p-button-text">
-              <router-link :to="item.to" :class="slotProps['class']">{{ $t(item.label) }}</router-link>
+          <div class="flex gap-1">
+            <pv-button
+                v-for="item in items"
+                :key="item.label"
+                as-child
+                v-slot="slotProps"
+                class="nav-button p-button-text"
+            >
+              <router-link :to="item.to" :class="slotProps['class']">
+                {{ $t(item.label) }}
+              </router-link>
             </pv-button>
           </div>
         </template>
@@ -71,76 +78,93 @@ export default {
         <template #end>
           <div class="flex align-items-center gap-3">
             <authentication-section/>
+            <div class="divider"></div>
             <language-switcher/>
           </div>
         </template>
       </pv-toolbar>
-      <pv-drawer v-model:visible="drawer"/>
+      <pv-drawer v-model:visible="drawer" header="Menu"/>
     </header>
 
-    <main :class="['main-content', { 'auth-layout': isAuthPage }]">
+    <main :class="['main-content', { 'auth-layout': isAuthPage, 'app-layout': !isAuthPage }]">
       <div v-if="isAuthPage" class="absolute top-0 right-0 p-4" style="z-index: 10">
         <language-switcher />
       </div>
       <router-view/>
     </main>
 
-    <footer v-if="!isAuthPage" class="footer-section bg-primary">
+    <footer v-if="!isAuthPage" class="app-footer">
       <footer-content/>
     </footer>
   </div>
 </template>
 
-<style>
+<style scoped>
+/* --- Reset & Variables --- */
+:root {
+  --primary-color: #10b981; /* Tu color Esmeralda */
+  --surface-ground: #f8fafc;
+}
+
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  width: 100%;
+  font-family: 'Inter', sans-serif; /* Recomiendo usar Inter o Roboto */
+  background-color: var(--surface-ground);
 }
 
-#app {
-  height: 100%;
-}
-
+/* --- Layout Containers --- */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.main-content.app-layout {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
   width: 100%;
-  box-sizing: border-box;
 }
 
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
+/* --- Estética del Header (Toolbar) --- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-.footer-section {
-  width: 100%;
-  padding: 1rem;
-  box-sizing: border-box;
+.app-logo {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #1e293b;
 }
 
-.border-none { border: none !important; }
-.border-noround { border-radius: 0 !important; }
-.m-0 { margin: 0 !important; }
-
-.main-content.auth-layout {
-  background: transparent;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.app-logo span {
+  color: var(--primary-color);
+  font-weight: 400;
 }
 
+.nav-button {
+  font-weight: 600 !important;
+  color: #64748b !important;
+}
+
+.nav-button:hover {
+  color: var(--primary-color) !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: #e2e8f0;
+}
+
+/* --- Video Background & Overlays --- */
 .video-background-container {
   position: fixed;
   top: 0;
@@ -148,13 +172,6 @@ html, body {
   width: 100vw;
   height: 100vh;
   z-index: -2;
-  overflow: hidden;
-}
-
-.video-bg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .video-overlay {
@@ -163,12 +180,35 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
   background: linear-gradient(
       135deg,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(20, 160, 140, 0.4) 100%
+      rgba(15, 23, 42, 0.9) 0%, /* Azul muy oscuro */
+      rgba(16, 185, 129, 0.3) 100% /* Tu esmeralda con transparencia */
   );
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px); /* Aumenté el blur para más elegancia */
+}
+
+/* --- Auth Page Specifics --- */
+.main-content.auth-layout {
+  background: transparent !important;
+  padding: 0;
+}
+
+/* --- Footer --- */
+.app-footer {
+  margin-top: auto;
+  background: #1e293b; /* Un gris muy oscuro para el footer */
+  color: white;
+  padding: 2rem;
+}
+
+/* Helpers */
+.border-none { border: none !important; }
+
+.video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: black; /* Esto ayuda a ver si el problema es el video o el CSS */
 }
 </style>
