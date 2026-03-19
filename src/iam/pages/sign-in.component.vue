@@ -45,26 +45,24 @@ export default {
 
           this.$toast.add({
             severity: 'success',
-            summary: 'Welcome back!',
-            detail: `Hello, ${this.username}. Login successful.`,
+            summary: this.$t('authentication.messages.welcome'),
+            detail: this.$t('authentication.messages.success_detail', { username: this.username }),
             life: 3000
           });
 
         } catch (error) {
-          let errorMessage = 'An unexpected error occurred.';
+          let errorKey = 'authentication.messages.error_unexpected';
 
-          if (error.response?.status === 401) {
-            errorMessage = 'Invalid username or password.';
-          } else if (error.response?.status === 404) {
-            errorMessage = 'Authentication service not found.';
+          if (error.response?.status === 401 || error.response?.status === 400) {
+            errorKey = 'authentication.messages.error_auth';
           } else if (error.response?.status === 500) {
-            errorMessage = 'Server is currently down. Please try again later.';
+            errorKey = 'authentication.messages.error_server';
           }
 
           this.$toast.add({
             severity: 'error',
-            summary: 'Login Failed',
-            detail: errorMessage,
+            summary: this.$t('authentication.login_failed'),
+            detail: this.$t(errorKey),
             life: 5000
           });
         } finally {
@@ -88,13 +86,13 @@ export default {
     <pv-card class="login-card shadow-4">
       <template #title>
         <div class="text-center mb-2">
-          <h2 class="m-0">Sign In</h2>
+          <h2 class="m-0">{{ $t('authentication.login_title') }}</h2>
         </div>
       </template>
 
       <template #content>
         <p class="text-center text-secondary mb-5">
-          Please enter your credentials to access the platform.
+          {{ $t('authentication.login_subtitle') }}
         </p>
 
         <form @submit.prevent="onSignIn" class="flex flex-column gap-4">
@@ -108,9 +106,9 @@ export default {
                   class="w-full"
                   :disabled="loading"
               />
-              <label for="username">Username</label>
+              <label for="username">{{ $t('authentication.username') }}</label>
             </pv-float-label>
-            <small v-if="submitted && !username" class="p-error">Username is required.</small>
+            <small v-if="submitted && !username" class="p-error">{{ $t('authentication.username_required') }}</small>
           </div>
 
           <div class="field">
@@ -124,25 +122,23 @@ export default {
                   :feedback="false"
                   :disabled="loading"
               />
-              <label for="password">Password</label>
+              <label for="password">{{ $t('authentication.password') }}</label>
             </pv-float-label>
-            <small v-if="submitted && !password" class="p-error">Password is required.</small>
+            <small v-if="submitted && !password" class="p-error">{{ $t('authentication.password_required') }}</small>
           </div>
 
           <div class="field-checkbox mb-4 flex align-items-center gap-2">
             <pv-checkbox id="rememberMe" v-model="rememberMe" :binary="true" />
-            <label for="rememberMe" class="text-sm text-white-alpha-70:">Remember me</label>
+            <label for="rememberMe" class="text-sm">{{ $t('authentication.remember_me') }}</label>
           </div>
 
           <div class="mt-2">
-            <pv-button
-                type="submit"
-                label="Login"
-                icon="pi pi-user"
-                class="w-full p-button-raised"
-                :loading="loading"
-                :disabled="isFormInvalid"
-            />
+            <pv-button type="submit"
+                       :label="$t('authentication.login_button')"
+                       icon="pi pi-user"
+                       class="w-full"
+                       :loading="loading"
+                       :disabled="isFormInvalid" />
           </div>
 
         </form>
@@ -150,8 +146,10 @@ export default {
 
       <template #footer>
         <div class="text-center mt-2">
-          <span class="text-sm">Don't have an account?
-            <router-link to="/sign-up" class="no-underline font-bold color-primary-700">Sign Up</router-link>
+          <span class="text-sm">{{ $t('authentication.no_account') }}
+            <router-link to="/sign-up" class="no-underline font-bold color-primary-700">
+              {{ $t('authentication.signup_link') }}
+            </router-link>
           </span>
         </div>
       </template>

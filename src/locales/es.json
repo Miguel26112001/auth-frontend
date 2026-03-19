@@ -2,6 +2,27 @@
   "option": {
     "home": "Inicio"
   },
+  "authentication": {
+    "login_title": "Iniciar Sesión",
+    "login_subtitle": "Por favor, ingrese sus credenciales para acceder a la plataforma.",
+    "login_failed": "Error de Inicio de Sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "username_required": "El usuario es obligatorio.",
+    "password_required": "La contraseña es obligatoria.",
+    "remember_me": "Recordarme",
+    "login_button": "Ingresar",
+    "no_account": "¿No tienes una cuenta?",
+    "signup_link": "Regístrate",
+    "messages": {
+      "welcome": "¡Bienvenido de nuevo!",
+      "success_detail": "Hola, {username}. Ingreso exitoso.",
+      "missing_info": "Por favor ingrese usuario y contraseña.",
+      "error_auth": "Usuario o contraseña inválidos.",
+      "error_server": "El servidor está caído. Intente más tarde.",
+      "error_unexpected": "Ha ocurrido un error inesperado."
+    }
+  },
   "authoring-phrase": {
     "intro": "Hecho con",
     "use": "utilizando",

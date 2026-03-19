@@ -2,6 +2,27 @@
   "option": {
     "home": "Home"
   },
+  "authentication": {
+    "login_title": "Sign In",
+    "login_subtitle": "Please enter your credentials to access the platform.",
+    "login_failed": "Login Failed",
+    "username": "Username",
+    "password": "Password",
+    "username_required": "Username is required.",
+    "password_required": "Password is required.",
+    "remember_me": "Remember me",
+    "login_button": "Login",
+    "no_account": "Don't have an account?",
+    "signup_link": "Sign Up",
+    "messages": {
+      "welcome": "Welcome back!",
+      "success_detail": "Hello, {username}. Login successful.",
+      "missing_info": "Please enter both username and password.",
+      "error_auth": "Invalid username or password.",
+      "error_server": "Server is currently down. Please try again later.",
+      "error_unexpected": "An unexpected error occurred."
+    }
+  },
   "authoring-phrase": {
     "intro": "Made with",
     "use": "using",
