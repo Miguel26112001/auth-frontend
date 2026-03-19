@@ -18,6 +18,11 @@ export default {
       loading: false
     };
   },
+  computed: {
+    isFormInvalid() {
+      return !this.username.trim() || !this.password.trim() || this.loading;
+    }
+  },
   methods: {
     /**
      * Sign in
@@ -46,12 +51,18 @@ export default {
           });
 
         } catch (error) {
-          console.error("Login Error:", error);
+          let errorMessage = 'An unexpected error occurred.';
+
+          if (error.response?.status === 400) {
+            errorMessage = 'Invalid username or password.';
+          } else if (error.response?.status === 500) {
+            errorMessage = 'Server is currently down. Please try again later.';
+          }
 
           this.$toast.add({
             severity: 'error',
-            summary: 'Authentication Failed',
-            detail: 'Invalid credentials or server unreachable. Please try again.',
+            summary: 'Login Failed',
+            detail: errorMessage,
             life: 5000
           });
         } finally {
@@ -128,6 +139,7 @@ export default {
                 icon="pi pi-user"
                 class="w-full p-button-raised"
                 :loading="loading"
+                :disabled="isFormInvalid"
             />
           </div>
 
