@@ -68,13 +68,6 @@ export default {
         } finally {
           this.loading = false;
         }
-      } else {
-        this.$toast.add({
-          severity: 'warn',
-          summary: 'Missing Info',
-          detail: 'Please enter both username and password.',
-          life: 3000
-        });
       }
     }
   }
@@ -172,8 +165,9 @@ export default {
   padding: 1.5rem;
   border-radius: 12px;
   background: rgba(26, 26, 26, 0.85) !important;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  will-change: transform;
 }
 
 .p-error {
